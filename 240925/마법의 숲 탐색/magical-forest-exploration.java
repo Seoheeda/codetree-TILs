@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -58,7 +59,6 @@ public class Main {
 			
 			// 아래로 내려가기 가능
 			if (down(jx, jy, way, fill)) {
-//				System.out.println("down");
 				jx = jx + 1;
 			// 아래로 불가능, 서쪽으로 가능
 			} else if (left(jx, jy, way, fill)) {
@@ -77,10 +77,15 @@ public class Main {
 					// 안 벗어났으면 정령 행 누적
 					ans += bfs(jx, jy, fill);
 				}
+				
+				for (int i = 0; i < R + 3; i++) {
+					System.out.println(Arrays.toString(arr[i]));
+				}
+				System.out.println();
+				
 				return;
 			}
-		}
-		
+		}		
 	}
 	
 	// 골룸이 숲에 벗어났는지
@@ -297,7 +302,7 @@ public class Main {
     	
     	// 정령 순서대로
     	for (int i = 0; i < K; i++) {
-    		move(infos[i][0], infos[i][1], i + 2);
+    		move(infos[i][0], infos[i][1], i + 1);
     	}
     	
     	System.out.println(ans);
