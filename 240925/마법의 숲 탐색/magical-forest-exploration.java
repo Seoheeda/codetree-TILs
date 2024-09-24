@@ -78,10 +78,10 @@ public class Main {
 					ans += bfs(jx, jy, fill);
 				}
 				
-				for (int i = 0; i < R + 3; i++) {
-					System.out.println(Arrays.toString(arr[i]));
-				}
-				System.out.println();
+				// for (int i = 0; i < R + 3; i++) {
+				// 	System.out.println(Arrays.toString(arr[i]));
+				// }
+				// System.out.println();
 				
 				return;
 			}
