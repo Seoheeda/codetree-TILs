@@ -2,24 +2,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Main {
-	
-//	[1, 1, 0, 0, 0, 1, 1, 1]
-//	[0, 1, 1, 1, 0, 0, 1, 1]
-//	[0, 1, 2, 0, 0, 1, 0, 2]
-//	[0, 1, 0, 2, 0, 2, 1, 0]
-//	[1, 1, 1, 1, 1, 0, 1, 0]
-//	[0, 1, 0, 1, 0, 0, 1, 1]
-//	[0, 2, 0, 1, 1, 0, 0, 2]
-//	[1, 0, 1, 1, 0, 1, 1, 0]
 	
 	static int L;
 	static int[] dx = {-1, 0, 1, 0};
@@ -45,43 +34,49 @@ public class Main {
 			return;
 		}
 		
+		// 움직인 기사들 저장 (rc 갱신을 위해)
 		Set<Integer> set = new HashSet<Integer>();
 		
 		for (int i = 0; i < list.size(); i++) {
 			int x = list.get(i)[0];
 			int y = list.get(i)[1];
 			int num = list.get(i)[2];
-			
+			// 기존 자리 0으로 바꾸기
 			knight[x][y] = 0;
-			
+			// 움직인 기사들 저장
 			set.add(num);
 		}
 		
+		// 움직인 기사들 rc 갱신
 		 for (int num : set) {
 		        rc[num][0] += dx[d];
 		        rc[num][1] += dy[d];
 		 }
 		 
+		// strength가 0 이하기 되어 사라져야 하는 기사들 저장
 		Set<Integer> gone = new HashSet<Integer>();
 
-		
 		for (int i = 0; i < list.size(); i++) {
 			int nx = list.get(i)[0] + dx[d];
 			int ny = list.get(i)[1] + dy[d];
 			int num = list.get(i)[2];
 			
+			// strength가 남아있는 기사들의 새로운 위치 저장
 			if (strength[num] > 0) {
 				knight[nx][ny] = num;
 				
+				// 명령 받은 기사가 아닌데 함정 만났다면 처리
 				if (arr[nx][ny] == 1 && num != n) {
 					strength[num]--;
 					damages[num]++;
 				}
+			// strength가 남아있지 않다면 사라져야 함으로 gone에 저장
 			} else {
 				gone.add(num);
 			}
 		}
 		
+		// gone에 있는 기사들 없애기
 		for (int g : gone) {
 			for (int i = 0; i < L; i++) {
 				for (int j = 0; j < L; j++) {
@@ -90,8 +85,7 @@ public class Main {
 					}
 				}
 			}
-		}
-				
+		}				
 	}
 	
 	// 이동 가능한지 보기
@@ -118,7 +112,7 @@ public class Main {
 			if (r + dx[d] < 0 || r + dx[d] >= L || c + dy[d] < 0 || c + dy[d] >= L || arr[r + dx[d]][c + dy[d]] == 2) {
 				return false;
 			} 
-			// 밑에 다른 기사 있음
+			// 밑에 다른 기사가 있거나 내 칸임
 			if (ok(r + dx[d], c + dy[d]) && !visited[r + dx[d]][c + dy[d]] && knight[r + dx[d]][c + dy[d]] != 0) {
 				temp[0] = r + dx[d];
 				temp[1] = c + dy[d];
@@ -145,7 +139,7 @@ public class Main {
 				list.add(new int[] {r + dx[(d + 3) % 4], c + dy[(d + 3) % 4], w});
 			}
 			
-			// 맞은편 칸까지 보긴 해야함
+			// 맞은편 칸이 내 칸임
 			if (ok(r + dx[(d + 2) % 4], c + dy[(d + 2) % 4]) && !visited[r + dx[(d + 2) % 4]][c + dy[(d + 2) % 4]] && knight[r + dx[(d + 2) % 4]][c + dy[(d + 2) % 4]] == w) {
 				temp[0] = r + dx[(d + 2) % 4];
 				temp[1] = c + dy[(d + 2) % 4];
@@ -211,7 +205,7 @@ public class Main {
     		}
     		strength[i] = k;
     	}
-    	
+    
     	damages = new int[N + 1];
     	
     	for (int i = 1; i < Q + 1; i++) {
@@ -219,18 +213,19 @@ public class Main {
     		int n = Integer.parseInt(st.nextToken());
     		int d = Integer.parseInt(st.nextToken());
 
+    		// 남아있는 기사일 경우에만 명령 수행
     		if (strength[n] > 0) {
         		order(n, d);
     		}
     	}
     	
+    	// 남아있는 기사의 대미지 합 구하기
     	int ans = 0;
     	for (int i = 1; i < N + 1; i++) {
     		if (strength[i] > 0) {
     			ans += damages[i];
     		}
     	}
-    	
     	
     	System.out.println(ans);
     }
