@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +28,15 @@ public class Main {
 		return false;
 	}
 	
+	// n번 기사 체력 남았는지 확인
+	static boolean alive(int n) {
+		if (strength[n] > 0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	// 명령 수행하기
 	static void order(int n, int d) {
 
@@ -34,7 +44,7 @@ public class Main {
 		if (!can(n, d)) {
 			return;
 		}
-		
+
 		Set<Integer> set = new HashSet<Integer>();
 		
 		for (int i = 0; i < list.size(); i++) {
@@ -47,12 +57,10 @@ public class Main {
 			set.add(num);
 		}
 		
-		Iterator<Integer> iterSet = set.iterator();
-		while (iterSet.hasNext()) {
-			int num = iterSet.next();
-			rc[num][0] += dx[d];
-			rc[num][1] += dy[d];
-		}
+		 for (int num : set) {
+		        rc[num][0] += dx[d];
+		        rc[num][1] += dy[d];
+		 }
 		
 		for (int i = 0; i < list.size(); i++) {
 			int nx = list.get(i)[0] + dx[d];
@@ -67,7 +75,7 @@ public class Main {
 					damages[num]++;
 				}
 			}		
-		}			
+		}				
 	}
 	
 	// 이동 가능한지 보기
@@ -187,7 +195,7 @@ public class Main {
     		}
     		strength[i] = k;
     	}
-    	
+ 
     	damages = new int[N + 1];
     	
     	for (int i = 1; i < Q + 1; i++) {
@@ -195,7 +203,9 @@ public class Main {
     		int n = Integer.parseInt(st.nextToken());
     		int d = Integer.parseInt(st.nextToken());
 
-    		order(n, d);
+    		if (strength[n] > 0) {
+        		order(n, d);
+    		}
     	}
     	
     	int ans = 0;
