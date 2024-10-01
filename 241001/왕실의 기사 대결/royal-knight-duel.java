@@ -12,6 +12,15 @@ import java.util.StringTokenizer;
 
 public class Main {
 	
+//	[1, 1, 0, 0, 0, 1, 1, 1]
+//	[0, 1, 1, 1, 0, 0, 1, 1]
+//	[0, 1, 2, 0, 0, 1, 0, 2]
+//	[0, 1, 0, 2, 0, 2, 1, 0]
+//	[1, 1, 1, 1, 1, 0, 1, 0]
+//	[0, 1, 0, 1, 0, 0, 1, 1]
+//	[0, 2, 0, 1, 1, 0, 0, 2]
+//	[1, 0, 1, 1, 0, 1, 1, 0]
+	
 	static int L;
 	static int[] dx = {-1, 0, 1, 0};
 	static int[] dy = {0, 1, 0, -1};
@@ -27,16 +36,7 @@ public class Main {
 		
 		return false;
 	}
-	
-	// n번 기사 체력 남았는지 확인
-	static boolean alive(int n) {
-		if (strength[n] > 0) {
-			return true;
-		}
-		
-		return false;
-	}
-	
+
 	// 명령 수행하기
 	static void order(int n, int d) {
 
@@ -44,7 +44,7 @@ public class Main {
 		if (!can(n, d)) {
 			return;
 		}
-
+		
 		Set<Integer> set = new HashSet<Integer>();
 		
 		for (int i = 0; i < list.size(); i++) {
@@ -61,6 +61,9 @@ public class Main {
 		        rc[num][0] += dx[d];
 		        rc[num][1] += dy[d];
 		 }
+		 
+		Set<Integer> gone = new HashSet<Integer>();
+
 		
 		for (int i = 0; i < list.size(); i++) {
 			int nx = list.get(i)[0] + dx[d];
@@ -74,8 +77,21 @@ public class Main {
 					strength[num]--;
 					damages[num]++;
 				}
-			}		
-		}				
+			} else {
+				gone.add(num);
+			}
+		}
+		
+		for (int g : gone) {
+			for (int i = 0; i < L; i++) {
+				for (int j = 0; j < L; j++) {
+					if (knight[i][j] == g) {
+						knight[i][j] = 0;
+					}
+				}
+			}
+		}
+				
 	}
 	
 	// 이동 가능한지 보기
@@ -195,7 +211,7 @@ public class Main {
     		}
     		strength[i] = k;
     	}
- 
+    	
     	damages = new int[N + 1];
     	
     	for (int i = 1; i < Q + 1; i++) {
@@ -214,6 +230,8 @@ public class Main {
     			ans += damages[i];
     		}
     	}
+    	
+    	
     	System.out.println(ans);
     }
 }
