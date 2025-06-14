@@ -143,7 +143,7 @@ public class Main {
 
 					food[nx][ny] = food[x][y];
 					ganjeol -= (amount[nx][ny] + 1);
-					if (ganjeol <= 0) {
+					if (ganjeol < 0) {
 						return;
 					}
 					amount[nx][ny]++;
